@@ -1,0 +1,81 @@
+
+#******************** Settings ************************
+
+*** Settings ***
+
+
+Documentation	Testing User Registration. Test scenario with verification, valid and invalid credentials.
+
+Pre Condition	Open Browser
+Post Condition	Close Browser
+Tags			Registration, TS-2-register(For Jira project management issue reference)
+
+#******************* Common Variables ********************
+
+*** Variables ***
+
+
+LoginUrl = https://gitlab.com/users/sign_up
+FName = Myname
+LName = Mysurname
+UserName = JuhoUu123
+Email = xxxxxxxxx@gmail.com
+PassWord = test****
+InvalidUsername = JuhoUu
+InvalidEmail = xxxx@gmail.com
+Empty = 
+
+
+
+#******************** Test Cases *************************
+
+*** Test Case ***
+
+
+# Positive Test
+
+	Register user with valid username and password 
+		Navigate To Sing Up Page  SingUpUrl
+    Input First Name  FName
+	Input Last Name  LName
+	Input Username  UserName
+	Input Email  Email
+	Input Password  PassWord
+    Submit Credentials
+    Identity Verification page should open
+	
+
+# Negative Tests 
+
+	Error message Should Be Visible After Input of Aready Taken Username 
+	Navigate To Sing Up Page  SingUpUrl
+	Input Username  InvalidUsername
+	Error message should contain 'Username is already taken'.
+
+Error message Should Be Visible if Password is empty
+	Navigate To Sing Up Page  SingUpUrl
+	Input First Name  FName
+	Input Last Name  LName
+	Input Username  UserName
+	Input Email  Email
+	Input Password  Empty
+    Submit Credentials
+	Error message should contain 'Minimum length is 8 characters.'.
+	
+Error message Should Be Visible if Input of Email is invalid
+	Navigate To Sing Up Page  SingUpUrl
+	Input Email  InvalidEmail
+	Error message should contain 'Please provide a valid email address.'.
+	
+Error message Should Be Visible if First name is empty
+	Navigate To Sing Up Page  SingUpUrl
+	Input First Name  Empty
+	Input Last Name  LName
+	Input Username  UserName
+	Input Email  Email
+	Input Password  PassWord
+    Submit Credentials
+	Error message should contain 'This field is required.'.
+
+
+

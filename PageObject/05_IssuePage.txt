@@ -1,0 +1,70 @@
+
+#******************** Settings ************************
+
+*** Settings ***
+Documentation	Issue Test scenario. CRUD Operation: Create, Read, Update, Delete
+
+
+
+Pre Condition	Log in to system made, Project must be created and choosen by the user before 
+Post Condition	Close Browser
+Tags 			Issue_create, Issue_update, Issue_delete, TS-1-issue_page(For Jira project management issue reference)
+
+
+#******************* Common Variables ********************
+
+
+*** Variables ***
+
+IssuesPageUrl = https://gitlab.com/testgroup4453544/juhos-test/issues
+Title = New issue
+UpdatedTitle = New issue update
+Empty =  
+
+
+
+#******************** Test Cases *************************
+
+*** Test Case ***
+
+
+# Positive Tests
+
+Create issue
+	Navigate To Project Issues Page  IssuesPageUrl
+	Select New Issue
+	Input title  Title
+	Submit form
+	Issue Page Should Contain "Issue created just now by FName LName"
+
+Update name of issue
+	Navigate To Project Issues Page  IssuesPageUrl
+	Select issue Title
+	Select Edit button
+	Input title UpdatedTitle
+	Submit form
+	Issue Page Should Contain "FName LName changed title from Title to UpdatedTitle just now"
+
+Create second issue with privious updated name
+	Navigate To Project Issues Page  IssuesPageUrl
+	Select New Issue
+	Input title  Title
+	Submit form
+	Issue Page Should Contain "Issue created just now by FName LName"
+
+Delete first issue
+	Navigate To Project Issues Page  IssuesPageUrl
+	Select issue UpdatedTitle
+	Select Delete issue from drop down list on the top 
+	Select Delete issue from pop up box
+	Issues Page Should Contain 'The issue was successfully deleted.'
+
+
+# Negative Test
+
+Error message Should Be Visible if Title is empty
+	Navigate To Project Issues Page  IssuesPageUrl
+	Select New Issue
+	Input title  Empty
+	Submit form
+	Error message should contain 'This field is required.'.
